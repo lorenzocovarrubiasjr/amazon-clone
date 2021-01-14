@@ -1,0 +1,28 @@
+.checkout {
+  display: flex;
+}
+
+.checkout-left {
+  width: 63%;
+  margin: 12px;
+}
+
+.checkout-right {
+  width: 32%;
+  margin: 12px;
+}
+
+.ad {
+  width: 100%;
+  object-fit: 100%;
+}
+
+.shopping-cart {
+  width: 100%;
+  background-color: white;
+}
+
+.checkout-summary {
+  width: 100%;
+  background-color: white;
+}
