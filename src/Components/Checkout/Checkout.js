@@ -1,6 +1,8 @@
 import React from "react";
 import "./Checkout.css";
 import { useStateValue } from "../../Data-Access/StateProvider";
+import FlipMove from "react-flip-move";
+import { getNameFromEmail } from "../../util";
 
 import Subtotal from "../Subtotal/subtotal";
 import CheckoutProduct from "../CheckoutProduct/CheckoutProduct";
@@ -17,21 +19,25 @@ function Checkout() {
           alt="ad for checkout"
         />
         <div className="shopping-cart">
-          <h4>Hello, {user?.email}</h4>
+          <h4>Hello, {user ? getNameFromEmail(user.email) : ""}</h4>
           <h2>Your Shopping Cart</h2>
-          <p>No Items Selected. Select All Items.</p>
-          <p>Price</p>
           <hr></hr>
-          <p>No Items in Cart.</p>
-          {basket.map((item) => (
-            <CheckoutProduct
-              id={item.id}
-              title={item.title}
-              image={item.image}
-              price={item.price}
-              rating={item.rating}
-            />
-          ))}
+          {basket.length === 0 ? (
+            <p>No Items in Cart.</p>
+          ) : (
+            <FlipMove staggerDelayBy="100">
+              {basket.map((item, i) => (
+                <CheckoutProduct
+                  key={`${item.id}_${i}`}
+                  id={item.id}
+                  title={item.title}
+                  image={item.image}
+                  price={item.price}
+                  rating={item.rating}
+                />
+              ))}
+            </FlipMove>
+          )}
         </div>
       </div>
       <Subtotal></Subtotal>

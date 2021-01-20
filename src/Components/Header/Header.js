@@ -3,6 +3,7 @@ import "./Header.css";
 import { useStateValue } from "../../Data-Access/StateProvider";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
+import { getNameFromEmail } from "../../util";
 
 import SearchIcon from "@material-ui/icons/Search";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
@@ -32,7 +33,9 @@ function Header() {
       <div className="header-nav">
         <Link to={!user && "/login"}>
           <div className="header-option signIn">
-            <div className="header-option-top-text">Hello World</div>
+            <div className="header-option-top-text">
+              Hello {user ? getNameFromEmail(user.email) : "World"}
+            </div>
 
             <div
               className="header-option-bottom-text"
