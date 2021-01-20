@@ -52,6 +52,10 @@
   font-size: 10px;
 }
 
+.header-option-bottom-text {
+  color: white;
+}
+
 .header-option-cart {
   display: flex;
   align-items: center;
