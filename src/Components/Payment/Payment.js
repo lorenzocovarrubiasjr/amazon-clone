@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Payment.css";
 import { Link, useHistory } from "react-router-dom";
 import axios from "../../axios";
+import { db } from "../../firebase";
 
 import { useStateValue } from "../../Data-Access/StateProvider";
 import { getBasketTotal } from "../../Data-Access/reducer";
@@ -27,7 +28,9 @@ function Payment() {
     const getClientSecret = async () => {
       const response = await axios({
         method: "post",
-        url: `/payments/create?total=${getBasketTotal(basket) * 100}`,
+        url: `/payments/create?total=${(getBasketTotal(basket) * 100).toFixed(
+          0
+        )}`,
       });
       setClientSecret(response.data.clientSecret);
     };
@@ -42,15 +45,29 @@ function Payment() {
     setProcessing(true);
 
     const payload = await stripe
-      .confirmCardPayment(clientSecret, {
+      .confirmCardPayment(clientSecret ? clientSecret : "testUser1", {
         payment_method: {
           card: elements.getElement(CardElement),
         },
       })
       .then(({ paymentIntent }) => {
+        db.collection("users")
+          .doc(user?.uid)
+          .collection("orders")
+          .doc(paymentIntent.id)
+          .set({
+            basket: basket,
+            amount: paymentIntent.amount,
+            created: paymentIntent.created,
+          });
+
         setSucceeded(true);
         setError(null);
         setProcessing(false);
+
+        dispatch({
+          type: "EMPTY_BASKET",
+        });
 
         history.replace("/orders");
       });

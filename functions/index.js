@@ -11,6 +11,7 @@ app.use(express.json());
 app.get("/", (request, response) => response.status(200).send("Hello Witeout"));
 app.post("/payments/create", async (request, response) => {
   const total = request.query.total;
+  console.log("This is query,: ", request.query);
   console.log("Payment request recieved Boom, for this amount, ", total);
   const paymentIntent = await stripe.paymentIntents.create({
     amount: total,
